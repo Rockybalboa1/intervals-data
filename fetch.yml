@@ -1,0 +1,35 @@
+name: Fetch Intervals Data
+
+on:
+  schedule:
+    - cron: "0 5 * * *"  # every day at 5 AM UTC
+  workflow_dispatch:      # allows manual runs
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Fetch Intervals Data
+        env:
+          INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
+          ATHLETE_ID: ${{ secrets.ATHLETE_ID }}
+        run: python fetch_intervals_data.py
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add activities.json
+          git commit -m "Update activities" || echo "No changes"
+          git push
