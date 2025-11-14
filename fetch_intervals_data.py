@@ -12,7 +12,7 @@ workspace = os.getenv("GITHUB_WORKSPACE")
 output_path = os.path.join(workspace, "activities.json")
 
 since = (datetime.date.today() - datetime.timedelta(days=60)).isoformat()
-url = f"https://intervals.icu/api/v1/athlete/athlete_id/activities?oldest={since}"
+url = f"https://intervals.icu/api/v1/athlete/{athlete_id}/activities?oldest={since}"
 
 print("Using workspace:", workspace)
 print("Fetching activities since", since)
